@@ -63,6 +63,8 @@ note that jstz.main.js is the source code, while jstz.rules.js is a generated
 file, any changes therein will be overwritten. The build is found in the
 dist folder in full and minified versions.
 
+    $ npm install 
+
 ## Credits
 
 Thanks to

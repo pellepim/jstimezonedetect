@@ -10,7 +10,12 @@
 <script type="text/javascript">
         var counter = 1;
         var interval = setInterval(function () {
-            document.getElementById('testArea').innerHTML = counter + ": " + jstz.determine().name() + "<br/>";
+            var tzinfo = jstz.determine(false);
+            document.getElementById('testArea').innerHTML = counter + ": " + tzinfo.name();
+            document.getElementById('testArea').innerHTML += ' (Using Internalization API: ' + tzinfo.using_intl + ')<br/>';
+            document.getElementById('testArea').innerHTML += 'Needle' + tzinfo.needle + '<br/>';
+            document.getElementById('testArea').innerHTML += 'Offsets' + tzinfo.offsets + '<br/>';
+
             counter++;
         }, 2000);
 </script>

@@ -8,13 +8,13 @@ import sys
 from datetime import datetime
 import os
 
-AMBIGUOUS_DST_ZONES = ['Africa/Cairo', 'Africa/Casablanca', 'America/Asuncion', 'America/Campo_Grande', 'America/Goose_Bay',
+AMBIGUOUS_DST_ZONES = ['Africa/Cairo', 'America/Asuncion', 'America/Campo_Grande', 'America/Goose_Bay',
                        'America/Havana', 'America/Mazatlan', 'America/Mexico_City', 'America/Miquelon',
                        'America/Santa_Isabel', 'America/Santiago', 'America/Sao_Paulo', 'Asia/Amman', 'Asia/Damascus',
                        'Asia/Dubai', 'Asia/Gaza', 'Asia/Irkutsk', 'Asia/Jerusalem', 'Asia/Kamchatka',
                        'Asia/Krasnoyarsk', 'Asia/Omsk', 'Asia/Vladivostok', 'Asia/Yakutsk', 'Asia/Yekaterinburg',
                        'Asia/Yerevan', 'Australia/Lord_Howe', 'Australia/Perth', 'Europe/Helsinki',
-                       'Europe/Minsk', 'Europe/Moscow', 'Pacific/Apia', 'Pacific/Fiji', 'Europe/London']
+                       'Europe/Minsk', 'Europe/Moscow', 'Pacific/Apia', 'Pacific/Fiji', 'Europe/London', 'Africa/Windhoek']
 
 OTHER_DST_ZONES = ['Africa/Johannesburg', 'Africa/Windhoek', 'America/Adak', 'America/Anchorage', 'America/Chicago',
                    'America/Denver', 'America/Godthab', 'America/Halifax', 'America/Los_Angeles', 'America/Montevideo',
@@ -22,14 +22,14 @@ OTHER_DST_ZONES = ['Africa/Johannesburg', 'Africa/Windhoek', 'America/Adak', 'Am
                    'Asia/Baku', 'Asia/Beirut', 'Asia/Dhaka', 'Asia/Jakarta', 'Asia/Karachi', 'Asia/Shanghai',
                    'Asia/Tehran', 'Asia/Tokyo', 'Atlantic/Azores', 'Australia/Adelaide', 'Australia/Brisbane',
                    'Australia/Sydney', 'Europe/Berlin', 'Pacific/Auckland', 'Pacific/Chatham',
-                   'Pacific/Majuro', 'Pacific/Noumea', 'Pacific/Tongatapu']
+                   'Pacific/Majuro', 'Pacific/Noumea', 'Pacific/Tongatapu', 'Africa/Casablanca']
 
-OTHER_TIMEZONES = ['America/Guatemala', 'Pacific/Pitcairn', 'Asia/Kolkata', 'Pacific/Kiritimati',
+OTHER_TIMEZONES = ['America/Guatemala', 'Pacific/Pitcairn', 'Asia/Calcutta', 'Pacific/Kiritimati',
                    'Australia/Darwin', 'Pacific/Pago_Pago', 'Pacific/Honolulu', 'America/Bogota',
                    'Atlantic/Cape_Verde', 'America/Phoenix', 'America/Santo_Domingo', 'UTC',
-                   'Asia/Kathmandu', 'America/Argentina/Buenos_Aires', 'Pacific/Marquesas',
-                   'Pacific/Norfolk', 'Asia/Kabul', 'Africa/Lagos', 'Pacific/Gambier', 'Asia/Rangoon',
-                   'Etc/GMT+12', 'Australia/Eucla', 'America/Caracas']
+                   'Asia/Katmandu', 'America/Buenos_Aires', 'Pacific/Marquesas',
+                   'Asia/Kabul', 'Africa/Lagos', 'Pacific/Gambier', 'Asia/Rangoon',
+                   'Australia/Eucla']
 
 OLSON_TO_WIN32_MAPPING = {
     'Etc/GMT+12': 'Dateline Standard Time',
@@ -111,7 +111,7 @@ def generate_rules():
     zones = []
     
     for timezone in AMBIGUOUS_DST_ZONES:
-        print "Generating rules for %s" % timezone
+        print("Generating rules for %s" % timezone)
         call_args = ['node', 'dst.js', timezone] + [str(y) for y in YEARS]
         result = {
             'name': timezone,
@@ -129,7 +129,7 @@ jstz.olson.dst_rules = %s;""" % (datetime.utcnow().strftime('%Y-%m-%d %H:%M:%SZ'
     with open('../jstz.rules.js', 'w') as rulefile:
         rulefile.write(rules_js)
 
-    print "Written to ../jstz.rules.js"
+    print("Written to ../jstz.rules.js")
 
 
 def test(include_success=False):
@@ -149,22 +149,22 @@ def test(include_success=False):
             output = subprocess.check_output(call_args)
     
             if "Assertion failed" in output or include_success:
-                print output.replace('\n', '')
+                print(output.replace('\n', ''))
                 success = False
                 failures += 1
             else:
                 successes += 1
 
     if success:
-        print "All tests succeeded (%s zones successfully detected)" % (successes + failures)
+        print("All tests succeeded (%s zones successfully detected)" % (successes + failures))
     else:
-        print "%s/%s tests failed" % (failures, successes + failures)
+        print("%s/%s tests failed" % (failures, successes + failures))
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
     if len(sys.argv) < 2:
-        print "Supply arguments 'generate' or 'test'"
+        print("Supply arguments 'generate' or 'test'")
         exit()
 
     if sys.argv[1] == 'generate':

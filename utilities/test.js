@@ -21,11 +21,12 @@ if (typeof expected_tz === 'undefined') {
     console.log(actual_tz);
 } else {
     process.env.TZ = expected_tz;
-    actual_tz = jstz.determine().name();
+    actual_tz = jstz.determine(false);
+    tz_name = actual_tz.name();
 
-    if (expected_tz === actual_tz) {
-        console.log("Successfully validated ", expected_tz, "===", actual_tz);
+    if (expected_tz === tz_name) {
+        console.log("Successfully validated ", expected_tz, "===", tz_name);
     } else {
-        console.log("Assertion failed ", expected_tz, "!==", actual_tz);
+        console.log("Assertion failed ", expected_tz, "!==", tz_name, '(Needle:', actual_tz.needle, 'Offsets:', actual_tz.offsets, ')');
     }
 }
